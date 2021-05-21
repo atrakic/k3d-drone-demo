@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     steps:
-      - uses: actions/checkout@v2
-      - uses: AbsaOSS/k3d-action@v1.3.1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create a cluster
+        uses: AbsaOSS/k3d-action@v1.3.1
         id: k3d-drone
         with:
           cluster-name: "drone"
