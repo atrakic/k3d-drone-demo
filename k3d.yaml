@@ -7,8 +7,6 @@ kubeAPI:
   hostPort: "6443"
 options:
   k3d:
-    wait: true
-    timeout: "60s"
     disableLoadbalancer: true
     disableImageVolume: true
   k3s:
