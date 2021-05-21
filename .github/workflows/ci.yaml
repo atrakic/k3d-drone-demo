@@ -44,7 +44,7 @@ jobs:
           sed -i 's/0.0.0.0/k3d-drone-server-0/g' /tmp/.kube/config
       - name: Run drone-cli with docker pipeline
         run: |
-          ./drone.sh
+          ./drone.sh k3d-action-bridge-network
       - name: e2e test after drone run
         run: |
           kubectl get all -o wide --all-namespaces

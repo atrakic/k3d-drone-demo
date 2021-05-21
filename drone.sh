@@ -8,5 +8,5 @@ DRONE=$(which drone)
   which drone && drone --version; }
 
 #DRONE_RUNNER_NETWORKS=k3d-drone \
-NETWORK=${1:-"drone"}
-drone exec --trusted --network=k3d-"$NETWORK"
+NETWORK=${1:-"k3d-drone"}
+drone exec --trusted --network="$NETWORK"
