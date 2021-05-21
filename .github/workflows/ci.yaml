@@ -17,11 +17,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: AbsaOSS/k3d-action@v1.3.1
+      - uses: AbsaOSS/k3d-action@1.4.0
         id: k3d-drone
         with:
           cluster-name: "drone"
-          use-default-registry: true
           args: >-
             --config=k3d.yaml
       
@@ -29,6 +28,7 @@ jobs:
         run: |
           echo ${{ steps.k3d-drone.outputs.network }} ${{ steps.k3d-drone.outputs.subnet-CIDR }}
           echo
+          export KUBECONFIG=$(k3d kubeconfig write drone)
           kubectl cluster-info --context k3d-drone
           kubectl get nodes -o wide
 

@@ -10,12 +10,11 @@ options:
     wait: true
     timeout: "60s"
     disableLoadbalancer: true
-    #disableImageVolume: true
+    disableImageVolume: true
   k3s:
     extraServerArgs:
-      - --tls-san=k3dsvc
-      - --disable=servicelb
-      - --disable=metrics-server
+      - --no-deploy=traefik,servicelb,metrics-server
+    extraAgentArgs: []
   kubeconfig:
     updateDefaultKubeconfig: false
     switchCurrentContext: false
