@@ -27,6 +27,15 @@ jobs:
           export KUBECONFIG=$(k3d kubeconfig write drone)
           kubectl cluster-info --context k3d-drone
           kubectl get nodes -o wide
+      - name: Nodes
+        run: |
+          docker ps -a
+          #docker inspect k3d-drone-server-0
+          kubectl config use-context k3d-drone
+          kubectl get nodes -o wide
+      - name: Network
+        run: |
+          docker network list
       - name: Export kubeconfig file
         run: |
           mkdir -p /tmp/.kube
