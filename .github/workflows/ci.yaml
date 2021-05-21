@@ -39,12 +39,13 @@ jobs:
       - name: Export kubeconfig file
         run: |
           mkdir -p /tmp/.kube
+          kubectl config view --minify
           kubectl config view > /tmp/.kube/config
           chmod 644 /tmp/.kube/config
           sed -i 's/0.0.0.0/k3d-drone-server-0/g' /tmp/.kube/config
       - name: Run drone-cli with docker pipeline
         run: |
-          ./drone.sh k3d-action-bridge-network
+          bash -x ./drone.sh k3d-action-bridge-network
       - name: e2e test after drone run
         run: |
           kubectl get all -o wide --all-namespaces
