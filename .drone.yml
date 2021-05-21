@@ -1,0 +1,30 @@
+---
+kind: pipeline
+type: docker
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  disable: true
+
+steps:
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    pull: true
+    volumes:
+      - name: kubeconfig
+        path: /.kube/config
+    commands:
+      - kubectl get pods --all-namespaces
+      - kubectl create namespace ci                                                                                 # create new namespace for test deployments
+      - kubectl -n ci run test-pod --image alpine -- tail -f /dev/null                                              # create dummy pod that just hangs around
+      - until kubectl -n ci get pod test-pod -o go-template='{{.status.phase}}' | grep 'Running'; do sleep 1s; done # wait for pod to be running
+      - kubectl -n ci get pods
+      - kubectl -n ci exec test-pod -- echo "Hello World!"                                                          # do something inside that pod -> here you could exec tests
+
+volumes:
+  - name: kubeconfig
+    host:
+      path: /tmp/.kube/config

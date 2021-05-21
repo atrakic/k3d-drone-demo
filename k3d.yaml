@@ -1,0 +1,21 @@
+apiVersion: k3d.io/v1alpha2
+kind: Simple
+name: drone
+servers: 1
+kubeAPI:
+  hostIP: "0.0.0.0"
+  hostPort: "6443"
+options:
+  k3d:
+    wait: true
+    timeout: "60s"
+    disableLoadbalancer: true
+    #disableImageVolume: true
+  k3s:
+    extraServerArgs:
+      - --tls-san=k3dsvc
+      - --disable=servicelb
+      - --disable=metrics-server
+  kubeconfig:
+    updateDefaultKubeconfig: false
+    switchCurrentContext: false
