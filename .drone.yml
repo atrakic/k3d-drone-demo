@@ -10,6 +10,11 @@ clone:
   disable: true
 
 steps:
+  - name: wait-for-k3s
+    image: alpine
+    commands:
+      - sleep 3
+
   - name: kubectl
     image: bitnami/kubectl:latest
     pull: true

@@ -13,39 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Create a cluster
-        uses: AbsaOSS/k3d-action@v1.3.1
-        id: k3d-drone
-        with:
-          cluster-name: "drone"
-          args: >-
-            --config=k3d.yaml
-      - name: Cluster info
-        run: |
-          echo ${{ steps.k3d-drone.outputs.network }} ${{ steps.k3d-drone.outputs.subnet-CIDR }}
-          echo
-          export KUBECONFIG=$(k3d kubeconfig write drone)
-          kubectl cluster-info --context k3d-drone
-          kubectl get nodes -o wide
-      - name: Nodes
-        run: |
-          docker ps -a
-          #docker inspect k3d-drone-server-0
-          kubectl config use-context k3d-drone
-          kubectl get nodes -o wide
-      - name: Network
-        run: |
-          docker network list
-      - name: Export kubeconfig file
-        run: |
-          mkdir -p /tmp/.kube
-          kubectl config view --minify
-          kubectl config view > /tmp/.kube/config
-          chmod 644 /tmp/.kube/config
-          sed -i 's/0.0.0.0/k3d-drone-server-0/g' /tmp/.kube/config
       - name: Run drone-cli with docker pipeline
         run: |
-          bash -x ./drone.sh k3d-action-bridge-network
-      - name: e2e test after drone run
-        run: |
-          kubectl get all -o wide --all-namespaces
+          bash -x ./drone.sh

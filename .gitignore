@@ -1,6 +1,0 @@
-.vscode/
-.local/
-**/__pycache__/
-docker-compose.orverride.yml
-drone
-k3s.yaml
