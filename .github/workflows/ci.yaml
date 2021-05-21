@@ -6,24 +6,18 @@ on:
   push:
 
 jobs:
-  ci-k3d:
+  ci:
     name: Continous integration with k3d and drone
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
-
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - uses: actions/checkout@v2
-      - uses: AbsaOSS/k3d-action@1.4.0
+      - uses: AbsaOSS/k3d-action@v1.3.1
         id: k3d-drone
         with:
           cluster-name: "drone"
           args: >-
             --config=k3d.yaml
-      
       - name: Cluster info
         run: |
           echo ${{ steps.k3d-drone.outputs.network }} ${{ steps.k3d-drone.outputs.subnet-CIDR }}
@@ -31,18 +25,15 @@ jobs:
           export KUBECONFIG=$(k3d kubeconfig write drone)
           kubectl cluster-info --context k3d-drone
           kubectl get nodes -o wide
-
       - name: Export kubeconfig file
         run: |
           mkdir -p /tmp/.kube
           kubectl config view > /tmp/.kube/config
           chmod 644 /tmp/.kube/config
           sed -i 's/0.0.0.0/k3d-drone-server-0/g' /tmp/.kube/config
-
       - name: Run drone-cli with docker pipeline
         run: |
           ./drone.sh
-          
       - name: e2e test after drone run
         run: |
           kubectl get all -o wide --all-namespaces
