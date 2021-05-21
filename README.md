@@ -1,6 +1,8 @@
 # k3d-drone-demo
 
-This repo shows how to run kubectl commands by using [Drone CI pipeline](https://drone.io/).
+[![Drone CI](https://github.com/atrakic/k3d-drone-demo/actions/workflows/ci.yaml/badge.svg)](https://github.com/atrakic/k3d-drone-demo/actions/workflows/ci.yaml)
+
+This repo shows how to run kubectl commands by using [Drone CI](https://drone.io/).
 
 ## Demo
 Drone pipeline steps inside ephemeral Docker container triggered by [Github actions](https://github.com/atrakic/k3d-drone-demo/actions)
